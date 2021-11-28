@@ -46,14 +46,13 @@ class CRUD {
 
 	public function show( $id ) {
 		try {
+			if ( ! $this->isPostExists( $id ) ) {
+				return 'Post was not found';
+			}
 			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE (id = ? AND deleted_at IS NULL)" );
 			$sql->execute( [ $id ] );
-			$result = $sql->fetch();
-			if ( ! $result ) {
-				$result = 'Post was not found';
-			}
 
-			return $result;
+			return $sql->fetch();
 		}
 		catch ( PDOException $e ) {
 			return $e->getMessage();
@@ -65,6 +64,9 @@ class CRUD {
 		$data['title']   = $title;
 		$data['content'] = $content;
 		$data['id']      = $id;
+		if ( ! $this->isPostExists( $id ) ) {
+			return 'Post was not found';
+		}
 		try {
 			$sql = $this->pdo->prepare( "UPDATE `posts` SET title=:title, content=:content WHERE (id=:id AND deleted_at IS NULL)" );
 			$sql->execute( $data );
@@ -86,11 +88,8 @@ class CRUD {
 			$data['date'] = date( 'Y-m-d H:i:s' );
 			$data['id']   = $id;
 
-			/* Check is post exists */
-			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE (id = ? AND deleted_at IS NULL)" );
-			$sql->execute( [ $id ] );
-			$result = $sql->fetch();
-			if ( ! $result ) {
+
+			if ( ! $this->isPostExists( $id ) ) {
 				return 'Post was not found';
 			}
 
@@ -102,6 +101,17 @@ class CRUD {
 		catch ( PDOException $e ) {
 			return $e->getMessage();
 		}
+	}
+
+	/*
+	 * Check is post exists
+	 */
+	protected function isPostExists( $id ) {
+		$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE (id = ? AND deleted_at IS NULL)" );
+		$sql->execute( [ $id ] );
+		$result = $sql->fetch();
+
+		return ! empty( $result );
 	}
 
 }
