@@ -10,14 +10,20 @@ $result = 'Params are wrong';
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 if ( $requestMethod === 'POST' ) {
 	$result = 'No title';
-	if ( isset( $_REQUEST ) && ! empty( $_REQUEST ) && isset( $_REQUEST['title'] ) && ! empty( $_REQUEST['title'] ) ) {
-		$result = $crud->create();
+	if ( isset( $_REQUEST ) && ! empty( $_REQUEST ) &&
+	     isset( $_REQUEST['title'] ) && ! empty( $_REQUEST['title'] ) &&
+	     isset( $_REQUEST['content'] ) && ! empty( $_REQUEST['content'] ) ) {
+
+		$title   = $_REQUEST['title'];
+		$title   = filter_input( INPUT_GET, 'title', FILTER_SANITIZE_STRING );
+		$content = $_REQUEST['content'];
+		$content = filter_input( INPUT_GET, 'content', FILTER_SANITIZE_STRING );
+		$result  = $crud->create( $title, $content );
 	}
 
-
-} else if ( $requestMethod === 'GET' && isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) ) {
+} else if ( $requestMethod === 'GET' ) {
 	$result = 'Id is incorrect';
-	if ( is_numeric( $_REQUEST['id'] ) ) {
+	if ( isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
 		$result = $crud->show( $_REQUEST['id'] );
 	}
 } else if ( $requestMethod === 'PUT' || $requestMethod === 'PUTCH' ) {
@@ -26,12 +32,13 @@ if ( $requestMethod === 'POST' ) {
 	     isset( $_REQUEST['title'] ) && ! empty( $_REQUEST['title'] ) &&
 	     isset( $_REQUEST['content'] ) && ! empty( $_REQUEST['content'] ) &&
 	     isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) ) {
+
 		$result = $crud->update( $_REQUEST['id'], $_REQUEST['title'], $_REQUEST['content'] );
 	}
 
-} else if ( $requestMethod === 'DELETE' && isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) ) {
+} else if ( $requestMethod === 'DELETE' ) {
 	$result = 'Id is incorrect';
-	if ( is_numeric( $_REQUEST['id'] ) ) {
+	if ( isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
 		$result = $crud->destroy( $_REQUEST['id'] );
 	}
 } else if ( $requestMethod === 'GET' ) {

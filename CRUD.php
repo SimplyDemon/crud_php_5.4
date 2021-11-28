@@ -12,14 +12,13 @@ class CRUD {
 		$this->pdo = DB::getPdo();
 	}
 
-	public function create() {
-		$message       = 'Post created';
-		$data          = [];
-		$title         = $_REQUEST['title'];
-		$title         = filter_input( INPUT_GET, 'title', FILTER_SANITIZE_STRING );
-		$data['title'] = $title;
+	public function create( $title, $content ) {
+		$message         = 'Post created';
+		$data            = [];
+		$data['title']   = $title;
+		$data['content'] = $content;
 		try {
-			$this->pdo->prepare( "INSERT INTO `posts`(`title`) VALUES(:title)" )->execute( $data );
+			$this->pdo->prepare( "INSERT INTO `posts`(`title`, `content`) VALUES(:title, :content)" )->execute( $data );
 		}
 		catch ( PDOException $e ) {
 			$message = $e->getMessage();
