@@ -27,4 +27,16 @@ class CRUD {
 
 		return $message;
 	}
+
+	public function index() {
+		try {
+			$sql = $this->pdo->prepare( "SELECT * FROM `posts`" );
+			$sql->execute();
+
+			return $sql->fetchAll();
+		}
+		catch ( PDOException $e ) {
+			return $e->getMessage();
+		}
+	}
 }

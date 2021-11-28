@@ -4,14 +4,19 @@ ini_set( 'display_errors', 'On' );
 
 require_once 'CRUD.php';
 
-$crud = new sd\CRUD();
+$crud   = new sd\CRUD();
+$result = 'Params are wrong';
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 if ( $requestMethod === 'POST' ) {
-	$message = 'No title';
+	$result = 'No title';
 	if ( isset( $_REQUEST ) && ! empty( $_REQUEST ) && isset( $_REQUEST['title'] ) && ! empty( $_REQUEST['title'] ) ) {
-		$message = $crud->create();
+		$result = $crud->create();
 	}
 
-	return $message;
+
+} else if ( $requestMethod === 'GET' ) {
+	$result = $crud->index();
 }
+
+echo json_encode( $result );
