@@ -9,7 +9,7 @@ $result = 'Params are wrong';
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 if ( $requestMethod === 'POST' ) {
-	$result = 'No title';
+	$result = 'No title or content';
 	if ( isset( $_REQUEST ) && ! empty( $_REQUEST ) &&
 	     isset( $_REQUEST['title'] ) && ! empty( $_REQUEST['title'] ) &&
 	     isset( $_REQUEST['content'] ) && ! empty( $_REQUEST['content'] ) ) {
