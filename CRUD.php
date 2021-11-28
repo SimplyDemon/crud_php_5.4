@@ -28,9 +28,9 @@ class CRUD {
 		return $message;
 	}
 
-	public function index() {
+	public function index( $count, $order ) {
 		try {
-			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE deleted_at IS NULL" );
+			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE deleted_at IS NULL ORDER BY id {$order} LIMIT 0, {$count}" );
 			$sql->execute();
 
 			$result = $sql->fetchAll( PDO::FETCH_ASSOC );

@@ -42,7 +42,22 @@ if ( $requestMethod === 'POST' ) {
 		$result = $crud->destroy( $_REQUEST['id'] );
 	}
 } else if ( $requestMethod === 'GET' ) {
-	$result = $crud->index();
+	$count = 20;
+	$order = 'DESC';
+
+	if (
+		isset( $_REQUEST['count'] ) && ! empty( $_REQUEST['count'] ) &&
+		is_numeric( $_REQUEST['count'] ) && (int) $_REQUEST['count'] > 0 ) {
+		$count = $_REQUEST['count'];
+	}
+
+	if (
+		( isset( $_REQUEST['order'] ) && ! empty( $_REQUEST['order'] ) ) &&
+		( $_REQUEST['order'] === 'DESC' || $_REQUEST['order'] === 'ASC' ) ) {
+		$order = $_REQUEST['order'];
+	}
+
+	$result = $crud->index( (int) $count, $order );
 }
 
 echo json_encode( $result );
