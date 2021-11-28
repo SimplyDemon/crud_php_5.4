@@ -29,6 +29,11 @@ if ( $requestMethod === 'POST' ) {
 		$result = $crud->update( $_REQUEST['id'], $_REQUEST['title'], $_REQUEST['content'] );
 	}
 
+} else if ( $requestMethod === 'DELETE' && isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) ) {
+	$result = 'Id is incorrect';
+	if ( is_numeric( $_REQUEST['id'] ) ) {
+		$result = $crud->destroy( $_REQUEST['id'] );
+	}
 } else if ( $requestMethod === 'GET' ) {
 	$result = $crud->index();
 }

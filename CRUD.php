@@ -30,10 +30,15 @@ class CRUD {
 
 	public function index() {
 		try {
-			$sql = $this->pdo->prepare( "SELECT * FROM `posts`" );
+			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE deleted_at IS NULL" );
 			$sql->execute();
 
-			return $sql->fetchAll();
+			$result = $sql->fetchAll();
+			if ( ! $result ) {
+				$result = 'No posts';
+			}
+
+			return $result;
 		}
 		catch ( PDOException $e ) {
 			return $e->getMessage();
@@ -42,10 +47,14 @@ class CRUD {
 
 	public function show( $id ) {
 		try {
-			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE id = ?" );
+			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE (id = ? AND deleted_at IS NULL)" );
 			$sql->execute( [ $id ] );
+			$result = $sql->fetch();
+			if ( ! $result ) {
+				$result = 'Post was not found';
+			}
 
-			return $sql->fetch();
+			return $result;
 		}
 		catch ( PDOException $e ) {
 			return $e->getMessage();
@@ -58,16 +67,42 @@ class CRUD {
 		$data['content'] = $content;
 		$data['id']      = $id;
 		try {
-			$sql = $this->pdo->prepare( "UPDATE `posts` SET title=:title, content=:content WHERE id=:id" );
+			$sql = $this->pdo->prepare( "UPDATE `posts` SET title=:title, content=:content WHERE (id=:id AND deleted_at IS NULL)" );
 			$sql->execute( $data );
 
-			return 'Post has changed';
+			return 'Post was updated';
 		}
 		catch ( PDOException $e ) {
 			return $e->getMessage();
 		}
 
+	}
 
+	/*
+	 * Use soft delete
+	 */
+	public function destroy( $id ) {
+		try {
+			$data         = [];
+			$data['date'] = date( 'Y-m-d H:i:s' );
+			$data['id']   = $id;
+
+			/* Check is post exists */
+			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE (id = ? AND deleted_at IS NULL)" );
+			$sql->execute( [ $id ] );
+			$result = $sql->fetch();
+			if ( ! $result ) {
+				return 'Post was not found';
+			}
+
+			$sql = $this->pdo->prepare( "UPDATE `posts` SET deleted_at=:date WHERE (id=:id AND deleted_at IS NULL)" );
+			$sql->execute( $data );
+
+			return 'Post was deleted';
+		}
+		catch ( PDOException $e ) {
+			return $e->getMessage();
+		}
 	}
 
 }
