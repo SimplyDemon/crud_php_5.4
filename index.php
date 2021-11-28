@@ -15,6 +15,11 @@ if ( $requestMethod === 'POST' ) {
 	}
 
 
+} else if ( $requestMethod === 'GET' && isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) ) {
+	$result = 'Id is incorrect';
+	if ( is_numeric( $_REQUEST['id'] ) ) {
+		$result = $crud->show( $_REQUEST['id'] );
+	}
 } else if ( $requestMethod === 'GET' ) {
 	$result = $crud->index();
 }

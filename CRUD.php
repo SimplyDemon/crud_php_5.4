@@ -39,4 +39,17 @@ class CRUD {
 			return $e->getMessage();
 		}
 	}
+
+	public function show( $id ) {
+		try {
+			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE id = ?" );
+			$sql->execute( [ $id ] );
+
+			return $sql->fetch();
+		}
+		catch ( PDOException $e ) {
+			return $e->getMessage();
+		}
+	}
+
 }
