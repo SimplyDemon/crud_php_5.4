@@ -52,4 +52,22 @@ class CRUD {
 		}
 	}
 
+	public function update( $id, $title, $content ) {
+		$data            = [];
+		$data['title']   = $title;
+		$data['content'] = $content;
+		$data['id']      = $id;
+		try {
+			$sql = $this->pdo->prepare( "UPDATE `posts` SET title=:title, content=:content WHERE id=:id" );
+			$sql->execute( $data );
+
+			return 'Post has changed';
+		}
+		catch ( PDOException $e ) {
+			return $e->getMessage();
+		}
+
+
+	}
+
 }

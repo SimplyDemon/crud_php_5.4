@@ -20,6 +20,15 @@ if ( $requestMethod === 'POST' ) {
 	if ( is_numeric( $_REQUEST['id'] ) ) {
 		$result = $crud->show( $_REQUEST['id'] );
 	}
+} else if ( $requestMethod === 'PUT' || $requestMethod === 'PUTCH' ) {
+	$result = 'Data is incorrect';
+	if ( isset( $_REQUEST ) && ! empty( $_REQUEST ) &&
+	     isset( $_REQUEST['title'] ) && ! empty( $_REQUEST['title'] ) &&
+	     isset( $_REQUEST['content'] ) && ! empty( $_REQUEST['content'] ) &&
+	     isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) ) {
+		$result = $crud->update( $_REQUEST['id'], $_REQUEST['title'], $_REQUEST['content'] );
+	}
+
 } else if ( $requestMethod === 'GET' ) {
 	$result = $crud->index();
 }
