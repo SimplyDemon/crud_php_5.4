@@ -26,7 +26,7 @@ if ( $requestMethod === 'POST' ) {
 	if ( isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
 		$result = $crud->show( $_REQUEST['id'] );
 	}
-} else if ( $requestMethod === 'PUT' || $requestMethod === 'PUTCH' ) {
+} else if ( $requestMethod === 'PUT' || $requestMethod === 'PATCH' ) {
 	$result = 'Data is incorrect';
 	if ( isset( $_REQUEST ) && ! empty( $_REQUEST ) &&
 	     isset( $_REQUEST['title'] ) && ! empty( $_REQUEST['title'] ) &&
