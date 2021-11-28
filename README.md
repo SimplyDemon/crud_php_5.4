@@ -1,6 +1,6 @@
 ## Info
 
-CRUD Api for php 5.4
+CRUD Api for php 7.0
 
 - Create [POST] http://simplyd.beget.tech/?title=Test&content=Some content
 - Read [GET] http://simplyd.beget.tech/
