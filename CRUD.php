@@ -64,11 +64,12 @@ class CRUD {
 		$data['title']   = $title;
 		$data['content'] = $content;
 		$data['id']      = $id;
+		$data['date']    = date( 'Y-m-d H:i:s' );
 		if ( ! $this->isPostExists( $id ) ) {
 			return 'Post was not found';
 		}
 		try {
-			$sql = $this->pdo->prepare( "UPDATE `posts` SET title=:title, content=:content WHERE (id=:id AND deleted_at IS NULL)" );
+			$sql = $this->pdo->prepare( "UPDATE `posts` SET title=:title, content=:content, updated_at=:date WHERE (id=:id AND deleted_at IS NULL)" );
 			$sql->execute( $data );
 
 			return 'Post was updated';
