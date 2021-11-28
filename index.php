@@ -21,9 +21,9 @@ if ( $requestMethod === 'POST' ) {
 		$result  = $crud->create( $title, $content );
 	}
 
-} else if ( $requestMethod === 'GET' ) {
+} else if ( $requestMethod === 'GET' && isset( $_REQUEST['id'] ) ) {
 	$result = 'Id is incorrect';
-	if ( isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
+	if ( ! empty( $_REQUEST['id'] ) && is_numeric( $_REQUEST['id'] ) ) {
 		$result = $crud->show( $_REQUEST['id'] );
 	}
 } else if ( $requestMethod === 'PUT' || $requestMethod === 'PATCH' ) {
