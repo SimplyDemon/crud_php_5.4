@@ -3,6 +3,7 @@
 namespace sd;
 require_once 'DB.php';
 
+use PDO;
 use PDOException;
 
 class CRUD {
@@ -32,7 +33,7 @@ class CRUD {
 			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE deleted_at IS NULL" );
 			$sql->execute();
 
-			$result = $sql->fetchAll();
+			$result = $sql->fetchAll( PDO::FETCH_ASSOC );
 			if ( ! $result ) {
 				$result = 'No posts';
 			}
@@ -52,7 +53,7 @@ class CRUD {
 			$sql = $this->pdo->prepare( "SELECT * FROM `posts` WHERE (id = ? AND deleted_at IS NULL)" );
 			$sql->execute( [ $id ] );
 
-			return $sql->fetch();
+			return $sql->fetch( PDO::FETCH_ASSOC );
 		}
 		catch ( PDOException $e ) {
 			return $e->getMessage();
